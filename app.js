@@ -9,25 +9,41 @@ const { NotFoundError, BadRequestError } = require("./expressError");
 const { findMean, findMedian, findMode } = require("./stats")
 const { convertStrNums } = require("./utils")
 
+const MISSING = "Expected key `nums` with comma-separated list of numbers.";
 
 /** Finds mean of nums in qs: returns {operation: "mean", result } */
 app.get("/mean", function(req, res) {
+  if (req.query.nums) {
+    throw new BadRequestError(MISSING);
+  }
+
   const nums = convertStrNums(req.query.nums);
   const mean = findMean(nums);
+
   return res.json({ response: {operation: "mean", value: mean} });
 })
 
 /** Finds median of nums in qs: returns {operation: "median", result } */
 app.get("/median", function(req, res) {
+  if (req.query.nums) {
+    throw new BadRequestError(MISSING);
+  }
+
   const nums = convertStrNums(req.query.nums);
   const median = findMedian(nums);
+
   return res.json({ response: {operation: "median", value: median} });
 })
 
 /** Finds mode of nums in qs: returns {operation: "mode", result } */
 app.get("/mode", function(req, res) {
+  if (req.query.nums) {
+    throw new BadRequestError(MISSING);
+  }
+
   const nums = convertStrNums(req.query.nums);
   const mode = findMode(nums);
+
   return res.json({ response: {operation: "mode", value: mode} });
 })
 
@@ -43,6 +59,7 @@ app.get("/all", function(req, res) {
   if (req.query.save) {
     const time = Date.now();
   }
+
   return res.json({ response: {operation: "all", mean, median, mode} });
 })
 
